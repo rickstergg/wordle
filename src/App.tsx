@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
 import { getRandomInt } from "./utils/utils";
+import { Grid } from "./components/grid";
 
 function App() {
   const [wordList, setWordList] = useState<string[]>([]);
@@ -21,7 +22,17 @@ function App() {
       .catch((err) => setError(err));
   };
 
-  return <div className="App">{currentWord}</div>;
+  return (
+    <div className="App">
+      {error && <div>Something went wrong!</div>}
+      {currentWord && (
+        <>
+          {currentWord}
+          <Grid magicWord={currentWord} />
+        </>
+      )}
+    </div>
+  );
 }
 
 export default App;

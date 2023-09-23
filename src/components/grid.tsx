@@ -16,6 +16,11 @@ export const Grid = ({ magicWord }: GridProps) => {
 
   useEffect(() => {
     function detectKeydown(e: KeyboardEvent) {
+      if (currentIndex == MAXIMUM_TRIES) {
+        console.log("game should be over!");
+        return;
+      }
+
       if (isLetter(e.keyCode)) {
         if (guesses[currentIndex].length < magicWord.length) {
           setGuesses((prev) => {
@@ -56,7 +61,6 @@ export const Grid = ({ magicWord }: GridProps) => {
         ) {
           // Game is over
           console.log("Game is over! Reset required.");
-          return;
         }
 
         setCurrentIndex((prev) => {
@@ -75,23 +79,23 @@ export const Grid = ({ magicWord }: GridProps) => {
 
   return (
     <>
-      {guesses.map((guess, index) => {
-        if (index < currentIndex) {
+      {guesses.map((guess, rowIndex) => {
+        if (rowIndex < currentIndex) {
           return (
             <Guess
-              key={index}
-              row={index}
-              size={magicWord.length}
+              key={rowIndex}
+              row={rowIndex}
+              magicWord={magicWord}
               word={guess}
               evaluated
             />
           );
-        } else if (index === currentIndex) {
+        } else if (rowIndex === currentIndex) {
           return (
             <Guess
-              key={index}
-              row={index}
-              size={magicWord.length}
+              key={rowIndex}
+              row={rowIndex}
+              magicWord={magicWord}
               word={guesses[currentIndex]}
               evaluated={false}
             />
@@ -99,9 +103,9 @@ export const Grid = ({ magicWord }: GridProps) => {
         } else {
           return (
             <Guess
-              key={index}
-              row={index}
-              size={magicWord.length}
+              key={rowIndex}
+              row={rowIndex}
+              magicWord={magicWord}
               word={guess}
               evaluated={false}
             />

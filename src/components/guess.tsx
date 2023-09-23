@@ -1,29 +1,40 @@
+import { useEffect, useState } from "react";
+import { evaluate } from "../utils/utils";
+
 type GuessProps = {
-  size: number;
+  magicWord: string;
   word: string;
   evaluated: boolean;
   row: number;
 };
 
-export const Guess = ({ size, word, evaluated, row }: GuessProps) => {
+export const Guess = ({ magicWord, word, evaluated, row }: GuessProps) => {
+  const [evaluations, setEvaluations] = useState<string[]>([]);
+
+  useEffect(() => {
+    setEvaluations(evaluate(magicWord, word));
+  }, [evaluated]);
+
   let letters = word.split("");
 
-  if (letters.length < size) {
-    letters = letters.concat([...new Array(size - letters.length).fill("")]);
+  if (letters.length < magicWord.length) {
+    letters = letters.concat([
+      ...new Array(magicWord.length - letters.length).fill(""),
+    ]);
   }
 
   return (
-    <div>
-      {letters.map((letter, index) => {
+    <div className="row">
+      {letters.map((_, index) => {
         return (
-          <input
+          <div
             key={`row-${row}-index-${index}`}
-            type="text"
-            readOnly
-            className="letter-box"
-            maxLength={1}
-            value={word[index] ?? ""}
-          />
+            className={`letter-box ${word[index] ? "filled-in" : ""} ${
+              evaluated ? evaluations[index] : ""
+            }`}
+          >
+            {word[index] ?? ""}
+          </div>
         );
       })}
     </div>

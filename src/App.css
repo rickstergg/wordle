@@ -10,16 +10,41 @@
   color: white;
 }
 
+.row {
+  display: flex;
+}
+
 .letter-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  border: 2px solid gray;
+  cursor: default;
+  user-select: none;
+  border: 2px solid #3a3a3c;
   border-radius: 3px;
   background-color: #121212;
   color: #FFFFFF;
   margin: 2px;
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 700;
   height: 4rem;
   width: 4rem;
   text-transform: uppercase;
+}
+
+.filled-in {
+  border: 2px solid #3a3a3c;
+}
+
+.correct {
+  background-color: #538d4e;
+}
+
+.present {
+  background-color: #b59f3b;
+}
+
+.absent {
+  background-color: #3a3a3c;
 }

@@ -12,10 +12,6 @@ export const Keyboard = ({
 }: KeyboardProps) => {
   useEffect(() => {
     const detectKeydown = (e: KeyboardEvent) => {
-      if (gameOver) {
-        return;
-      }
-
       if (isEnter(e.keyCode)) {
         handleEnter();
       } else if (isDelete(e.keyCode)) {
@@ -32,7 +28,7 @@ export const Keyboard = ({
     return function cleanUp() {
       document.removeEventListener("keydown", detectKeydown);
     };
-  }, [gameOver, handleEnter, handleDelete, handleLetter]);
+  }, [handleEnter, handleDelete, handleLetter]);
 
   const onClick = (value: string) => {
     if (value === "enter") {
@@ -47,27 +43,26 @@ export const Keyboard = ({
     <Grid container direction={"column"}>
       <Grid container item spacing={1} justifyContent={"center"}>
         {["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"].map((key) => (
-          <Grid item>
-            <Key key={key} value={key} onClick={onClick} />
+          <Grid key={key} item>
+            <Key value={key} onClick={onClick} />
           </Grid>
         ))}
       </Grid>
       <Grid container item spacing={1} justifyContent={"center"}>
         {["a", "s", "d", "f", "g", "h", "j", "k", "l"].map((key) => (
-          <Grid item>
-            <Key key={key} value={key} onClick={onClick} />
+          <Grid key={key} item>
+            <Key value={key} onClick={onClick} />
           </Grid>
         ))}
       </Grid>
       <Grid container item spacing={1} justifyContent={"center"}>
-        {["enter", "z", "x", "c", "v", "b", "n", "m"].map((key) => (
-          <Grid item>
-            <Key key={key} value={key} onClick={onClick} />
-          </Grid>
-        ))}
-        <Grid item>
-          <Key key={"backspace"} value={"backspace"} onClick={onClick} />
-        </Grid>
+        {["enter", "z", "x", "c", "v", "b", "n", "m", "backspace"].map(
+          (key) => (
+            <Grid key={key} item>
+              <Key value={key} onClick={onClick} />
+            </Grid>
+          )
+        )}
       </Grid>
     </Grid>
   );

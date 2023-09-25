@@ -4,13 +4,14 @@ import { getRandomWord } from "./utils/utils";
 import { GuessGrid } from "./components/grid/GuessGrid";
 import { Dictionary } from "./types";
 import { LineNumberForm } from "./components/LineNumberForm";
-import { Button, Grid } from "@mui/material";
+import { Button, Grid, Modal, Box } from "@mui/material";
 import { Keyboard } from "./components/keyboard/Keyboard";
 
 const MAXIMUM_TRIES = 6;
 
 function App() {
   const [wordDictionary, setWordDictionary] = useState<Dictionary>({});
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [gameOver, setGameOver] = useState<boolean>(false);
   const [magicWord, setMagicWord] = useState<string>("");
   const [guesses, setGuesses] = useState<string[]>(
@@ -45,6 +46,7 @@ function App() {
     setMagicWord(getRandomWord(wordDictionary));
     setCurrentIndex(0);
     setGameOver(false);
+    setModalOpen(false);
   };
 
   const handleLineNumber = (lineNumber: number) => {
@@ -60,6 +62,10 @@ function App() {
   };
 
   const handleDelete = () => {
+    if (gameOver) {
+      return;
+    }
+
     setGuesses((prev) => {
       const newGuesses = [...prev];
       newGuesses[currentIndex] = newGuesses[currentIndex].slice(0, -1);
@@ -68,6 +74,10 @@ function App() {
   };
 
   const handleLetter = (letter: string) => {
+    if (gameOver) {
+      return;
+    }
+
     if (guesses[currentIndex].length < magicWord.length) {
       setGuesses((prev) => {
         const nextGuesses = [...prev];
@@ -79,6 +89,10 @@ function App() {
   };
 
   const handleEnter = () => {
+    if (gameOver) {
+      return;
+    }
+
     const currentGuess = guesses[currentIndex];
     if (currentGuess.length === 0) {
       console.log("Guess cannot be empty!");
@@ -102,14 +116,13 @@ function App() {
       return;
     }
 
-    if (guesses.filter((guess) => guess.length > 0).length === MAXIMUM_TRIES) {
-      // Game is over
-      console.log("Game is over! Reset required.");
-      return;
-    }
-
-    if (guesses.includes(magicWord)) {
+    if (
+      guesses.includes(magicWord) ||
+      guesses.filter((guess) => guess.length > 0).length === MAXIMUM_TRIES
+    ) {
+      console.log("game is over!");
       setGameOver(true);
+      setModalOpen(true);
     }
 
     setCurrentIndex((prev) => {
@@ -160,6 +173,29 @@ function App() {
           Reset!
         </Button>
       </Grid>
+      {modalOpen && (
+        <Modal
+          style={{
+            color: "white",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+          }}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+        >
+          <Box sx={{ padding: 5, backgroundColor: "#3a3a3a" }}>
+            {guesses.includes(magicWord) ? (
+              <>You Win! Congrats!</>
+            ) : (
+              <>Better luck next time, the word was {magicWord}</>
+            )}
+          </Box>
+        </Modal>
+      )}
     </div>
   );
 }

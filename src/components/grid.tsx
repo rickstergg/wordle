@@ -1,22 +1,29 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, Dispatch, SetStateAction } from "react";
 import { isDelete, isEnter, isLetter } from "../utils/utils";
-import { Guess } from "./guess";
+import { CurrentRow } from "./CurrentRow";
+import { EmptyRow } from "./EmptyRow";
+import { EvaluatedRow } from "./EvaluatedRow";
 
 type GridProps = {
   magicWord: string;
+  guesses: string[];
+  maxTries: number;
+  currentIndex: number;
+  setCurrentIndex: Dispatch<SetStateAction<number>>;
+  setGuesses: Dispatch<SetStateAction<string[]>>;
 };
 
-const MAXIMUM_TRIES = 6;
-
-export const Grid = ({ magicWord }: GridProps) => {
-  const [guesses, setGuesses] = useState<string[]>(
-    new Array(MAXIMUM_TRIES).fill("")
-  );
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
-
+export const Grid = ({
+  magicWord,
+  maxTries,
+  currentIndex,
+  setCurrentIndex,
+  guesses,
+  setGuesses,
+}: GridProps) => {
   useEffect(() => {
     function detectKeydown(e: KeyboardEvent) {
-      if (currentIndex == MAXIMUM_TRIES) {
+      if (currentIndex == guesses.length) {
         console.log("game should be over!");
         return;
       }
@@ -56,9 +63,7 @@ export const Grid = ({ magicWord }: GridProps) => {
           return;
         }
 
-        if (
-          guesses.filter((guess) => guess.length > 0).length === MAXIMUM_TRIES
-        ) {
+        if (guesses.filter((guess) => guess.length > 0).length === maxTries) {
           // Game is over
           console.log("Game is over! Reset required.");
         }
@@ -82,33 +87,25 @@ export const Grid = ({ magicWord }: GridProps) => {
       {guesses.map((guess, rowIndex) => {
         if (rowIndex < currentIndex) {
           return (
-            <Guess
+            <EvaluatedRow
               key={rowIndex}
               row={rowIndex}
               magicWord={magicWord}
               word={guess}
-              evaluated
             />
           );
         } else if (rowIndex === currentIndex) {
           return (
-            <Guess
+            <CurrentRow
               key={rowIndex}
               row={rowIndex}
-              magicWord={magicWord}
+              size={magicWord.length}
               word={guesses[currentIndex]}
-              evaluated={false}
             />
           );
         } else {
           return (
-            <Guess
-              key={rowIndex}
-              row={rowIndex}
-              magicWord={magicWord}
-              word={guess}
-              evaluated={false}
-            />
+            <EmptyRow key={rowIndex} row={rowIndex} size={magicWord.length} />
           );
         }
       })}

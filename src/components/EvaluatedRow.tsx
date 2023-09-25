@@ -12,7 +12,7 @@ export const EvaluatedRow = ({ magicWord, word, row }: EvaluatedRowProps) => {
             key={`row-${row}-index-${index}`}
             className={`letter-box ${
               word[index] ? "filled-in" : ""
-            } ${evaluations[index].toLowerCase()}`}
+            } ${evaluations[index]?.toLowerCase()}`}
           >
             {word[index]}
           </div>

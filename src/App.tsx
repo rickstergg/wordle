@@ -4,11 +4,12 @@ import { getRandomWord } from "./utils/utils";
 import { GuessGrid } from "./components/GuessGrid";
 import { Dictionary } from "./types";
 import { LineNumberForm } from "./components/LineNumberForm";
+import { Button, Grid } from "@mui/material";
 
 const MAXIMUM_TRIES = 6;
 
 function App() {
-  const [wordDictionary, setWordDictionary] = useState({});
+  const [wordDictionary, setWordDictionary] = useState<Dictionary>({});
   const [gameOver, setGameOver] = useState<boolean>(false);
   const [currentWord, setCurrentWord] = useState<string>("");
   const [guesses, setGuesses] = useState<string[]>(
@@ -45,29 +46,53 @@ function App() {
     setGameOver(false);
   };
 
+  const handleLineNumber = (lineNumber: number) => {
+    let word = wordDictionary[lineNumber];
+    setGuesses((prev) => {
+      if (currentWord.length < word.length) {
+        word = word.slice(0, currentWord.length);
+      }
+      prev[currentIndex] = word;
+      return prev;
+    });
+  };
+
   return (
     <div className="App">
       {error && <>Something went wrong!</>}
       {currentWord && (
-        <>
-          <>Loaded words, current word: {currentWord}</>
-          <input type="text" maxLength={currentWord.toString().length} />
-          <button onClick={() => console.log("clicked")}>Input Guess</button>
-          <LineNumberForm />
-          <GuessGrid
-            dictionary={wordDictionary}
-            magicWord={currentWord}
-            maxTries={MAXIMUM_TRIES}
-            guesses={guesses}
-            gameOver={gameOver}
-            setGameOver={setGameOver}
-            setGuesses={setGuesses}
-            setCurrentIndex={setCurrentIndex}
-            currentIndex={currentIndex}
-          />
-        </>
+        <Grid
+          container
+          direction="column"
+          alignItems={"center"}
+          justifyContent={"center"}
+          spacing={4}
+        >
+          <Grid item>
+            <>Loaded words, current word: {currentWord}</>
+          </Grid>
+          <Grid item>
+            <LineNumberForm
+              max={Object.values(wordDictionary).length}
+              handleLineNumber={handleLineNumber}
+            />
+          </Grid>
+          <Grid item>
+            <GuessGrid
+              dictionary={wordDictionary}
+              magicWord={currentWord}
+              maxTries={MAXIMUM_TRIES}
+              guesses={guesses}
+              gameOver={gameOver}
+              setGameOver={setGameOver}
+              setGuesses={setGuesses}
+              setCurrentIndex={setCurrentIndex}
+              currentIndex={currentIndex}
+            />
+          </Grid>
+        </Grid>
       )}
-      <div onClick={() => reset()}>Reset!</div>
+      <Button onClick={() => reset()}>Reset!</Button>
     </div>
   );
 }

@@ -3,9 +3,9 @@ import { isDelete, isEnter, isLetter } from "../utils/utils";
 import { CurrentRow } from "./CurrentRow";
 import { EmptyRow } from "./EmptyRow";
 import { EvaluatedRow } from "./EvaluatedRow";
-import { GridProps } from "../types";
+import { GuessGridProps } from "../types";
 
-export const Grid = ({
+export const GuessGrid = ({
   magicWord,
   maxTries,
   dictionary,
@@ -15,7 +15,7 @@ export const Grid = ({
   setCurrentIndex,
   guesses,
   setGuesses,
-}: GridProps) => {
+}: GuessGridProps) => {
   useEffect(() => {
     function detectKeydown(e: KeyboardEvent) {
       if (currentIndex === guesses.length || gameOver) {

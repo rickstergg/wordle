@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 
-export type GridProps = {
+export type GuessGridProps = {
   magicWord: string;
   maxTries: number;
   dictionary: Dictionary;

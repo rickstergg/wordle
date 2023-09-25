@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
 import { getRandomWord } from "./utils/utils";
-import { Grid } from "./components/Grid";
+import { GuessGrid } from "./components/GuessGrid";
 import { Dictionary } from "./types";
 
 const MAXIMUM_TRIES = 6;
@@ -52,7 +52,7 @@ function App() {
           <>Loaded words, current word: {currentWord}</>
           <input type="text" maxLength={currentWord.toString().length} />
           <button onClick={() => console.log("clicked")}>Input Guess</button>
-          <Grid
+          <GuessGrid
             dictionary={wordDictionary}
             magicWord={currentWord}
             maxTries={MAXIMUM_TRIES}

@@ -53,6 +53,7 @@ function App() {
           <input type="text" maxLength={currentWord.toString().length} />
           <button onClick={() => console.log("clicked")}>Input Guess</button>
           <Grid
+            dictionary={wordDictionary}
             magicWord={currentWord}
             maxTries={MAXIMUM_TRIES}
             guesses={guesses}

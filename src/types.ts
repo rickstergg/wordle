@@ -3,6 +3,7 @@ import { Dispatch, SetStateAction } from "react";
 export type GridProps = {
   magicWord: string;
   maxTries: number;
+  dictionary: Dictionary;
   gameOver: boolean;
   setGameOver: Dispatch<SetStateAction<boolean>>;
   currentIndex: number;

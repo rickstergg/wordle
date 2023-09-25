@@ -8,6 +8,7 @@ import { GridProps } from "../types";
 export const Grid = ({
   magicWord,
   maxTries,
+  dictionary,
   gameOver,
   setGameOver,
   currentIndex,
@@ -22,8 +23,10 @@ export const Grid = ({
         return;
       }
 
+      const currentGuess = guesses[currentIndex];
+
       if (isLetter(e.keyCode)) {
-        if (guesses[currentIndex].length < magicWord.length) {
+        if (currentGuess.length < magicWord.length) {
           setGuesses((prev) => {
             const nextGuesses = [...prev];
             nextGuesses[currentIndex] += e.key;
@@ -34,7 +37,7 @@ export const Grid = ({
       }
 
       if (isDelete(e.keyCode)) {
-        if (guesses[currentIndex].length) {
+        if (currentGuess.length) {
           setGuesses((prev) => {
             const nextGuesses = [...prev];
             nextGuesses[currentIndex] = nextGuesses[currentIndex].slice(0, -1);
@@ -45,20 +48,25 @@ export const Grid = ({
       }
 
       if (isEnter(e.keyCode)) {
-        if (guesses[currentIndex].length === 0) {
+        if (currentGuess.length === 0) {
           console.log("Guess cannot be empty!");
           return;
         }
 
-        if (guesses[currentIndex].length !== magicWord.length) {
+        if (currentGuess.length !== magicWord.length) {
           // Guess must be same length!
           console.log("Guess must be same length as word!");
           return;
         }
 
-        if (guesses.slice(0, currentIndex).includes(guesses[currentIndex])) {
+        if (guesses.slice(0, currentIndex).includes(currentGuess)) {
           // Cannot guess the same word multiple times!
           console.log("Cannot guess an already guessed word!");
+          return;
+        }
+
+        if (!Object.values(dictionary).includes(currentGuess)) {
+          console.log("Guess must be a word in the dictionary!");
           return;
         }
 
@@ -84,6 +92,7 @@ export const Grid = ({
       document.removeEventListener("keydown", detectKeydown);
     };
   }, [
+    dictionary,
     magicWord,
     maxTries,
     gameOver,

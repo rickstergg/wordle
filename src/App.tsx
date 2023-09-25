@@ -4,8 +4,9 @@ import { getRandomWord } from "./utils/utils";
 import { GuessGrid } from "./components/grid/GuessGrid";
 import { Dictionary } from "./types";
 import { LineNumberForm } from "./components/LineNumberForm";
-import { Button, Grid, Modal, Box } from "@mui/material";
+import { Button, Grid, Modal, Box, Switch } from "@mui/material";
 import { Keyboard } from "./components/keyboard/Keyboard";
+import { useSnackbar } from "notistack";
 
 const MAXIMUM_TRIES = 6;
 
@@ -19,6 +20,8 @@ function App() {
   );
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [error, setError] = useState<string | undefined>();
+
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     let loaded = false;
@@ -95,24 +98,30 @@ function App() {
 
     const currentGuess = guesses[currentIndex];
     if (currentGuess.length === 0) {
-      console.log("Guess cannot be empty!");
       return;
     }
 
     if (currentGuess.length !== magicWord.length) {
-      // Guess must be same length!
-      console.log("Guess must be same length as word!");
+      enqueueSnackbar("Guess must be same length as the magic word.", {
+        variant: "error",
+      });
       return;
     }
 
     if (guesses.slice(0, currentIndex).includes(currentGuess)) {
-      // Cannot guess the same word multiple times!
-      console.log("Cannot guess an already guessed word!");
+      enqueueSnackbar(`${currentGuess} was already guessed.`, {
+        variant: "error",
+      });
       return;
     }
 
     if (!Object.values(wordDictionary).includes(currentGuess)) {
-      console.log("Guess must be a word in the dictionary!");
+      enqueueSnackbar(
+        `${currentGuess} does not exist in the dictionary at /wordlist.txt.`,
+        {
+          variant: "error",
+        }
+      );
       return;
     }
 
@@ -120,7 +129,6 @@ function App() {
       guesses.includes(magicWord) ||
       guesses.filter((guess) => guess.length > 0).length === MAXIMUM_TRIES
     ) {
-      console.log("game is over!");
       setGameOver(true);
       setModalOpen(true);
     }

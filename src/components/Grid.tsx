@@ -73,6 +73,7 @@ export const Grid = ({
         if (guesses.filter((guess) => guess.length > 0).length === maxTries) {
           // Game is over
           console.log("Game is over! Reset required.");
+          return;
         }
 
         if (guesses.includes(magicWord)) {

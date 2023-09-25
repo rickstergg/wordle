@@ -1,14 +1,10 @@
-type CurrentRowProps = {
-  word: string;
-  row: number;
-  size: number;
-};
+import { CurrentRowProps } from "../types";
 
 export const CurrentRow = ({ size, word, row }: CurrentRowProps) => {
   let letters = word.split("");
 
   if (letters.length < size) {
-    letters = letters.concat([...new Array(size - letters.length).fill("")]);
+    letters = letters.concat([...Array(size - letters.length).fill("")]);
   }
 
   return (

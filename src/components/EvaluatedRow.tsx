@@ -1,10 +1,5 @@
+import { EvaluatedRowProps } from "../types";
 import { evaluate } from "../utils/utils";
-
-type EvaluatedRowProps = {
-  magicWord: string;
-  word: string;
-  row: number;
-};
 
 export const EvaluatedRow = ({ magicWord, word, row }: EvaluatedRowProps) => {
   const evaluations = evaluate(magicWord, word);

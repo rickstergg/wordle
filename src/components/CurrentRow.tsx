@@ -1,6 +1,3 @@
-import { useEffect, useState } from "react";
-import { evaluate } from "../utils/utils";
-
 type CurrentRowProps = {
   word: string;
   row: number;

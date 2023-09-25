@@ -7,6 +7,7 @@ const MAXIMUM_TRIES = 6;
 
 function App() {
   const [wordList, setWordList] = useState<string[]>([]);
+  const [gameOver, setGameOver] = useState<boolean>(false);
   const [currentWord, setCurrentWord] = useState<string>("");
   const [guesses, setGuesses] = useState<string[]>(
     new Array(MAXIMUM_TRIES).fill("")
@@ -36,6 +37,7 @@ function App() {
     setGuesses(Array(MAXIMUM_TRIES).fill(""));
     setCurrentWord("sweet"); // Testing purposes
     setCurrentIndex(0);
+    setGameOver(false);
   };
 
   console.log(guesses);
@@ -57,13 +59,15 @@ function App() {
             magicWord={currentWord}
             maxTries={MAXIMUM_TRIES}
             guesses={guesses}
+            gameOver={gameOver}
+            setGameOver={setGameOver}
             setGuesses={setGuesses}
             setCurrentIndex={setCurrentIndex}
             currentIndex={currentIndex}
           />
         </>
       )}
-      <button onClick={() => reset()}>Reset!</button>
+      <div onClick={() => reset()}>Reset!</div>
     </div>
   );
 }

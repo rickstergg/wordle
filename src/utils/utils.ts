@@ -32,7 +32,7 @@ export const getRandomWord = (dictionary: Dictionary): string => {
   return words[getRandomInt(words.length - 1)];
 }
 
-export const evaluate = (magicWord: string, word: string): string[] => {
+export const evaluate = (magicWord: string, word: string): Evaluation[] => {
   let pendingChars = magicWord;
   let evaluations = Array(magicWord.length).fill('');
 

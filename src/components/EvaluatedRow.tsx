@@ -10,9 +10,9 @@ export const EvaluatedRow = ({ magicWord, word, row }: EvaluatedRowProps) => {
         return (
           <div
             key={`row-${row}-index-${index}`}
-            className={`letter-box ${word[index] ? "filled-in" : ""} ${
-              evaluations[index]
-            }`}
+            className={`letter-box ${
+              word[index] ? "filled-in" : ""
+            } ${evaluations[index].toLowerCase()}`}
           >
             {word[index]}
           </div>

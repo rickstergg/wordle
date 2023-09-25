@@ -1,5 +1,12 @@
 import { Dictionary } from "../types";
 
+export enum Evaluation {
+  ABSENT = 'ABSENT',
+  CORRECT = 'CORRECT',
+  PRESENT = 'PRESENT',
+  PENDING = 'PENDING',
+};
+
 export const getRandomInt = (max: number) => {
   return Math.floor(Math.random() * max);
 }
@@ -26,28 +33,28 @@ export const getRandomWord = (dictionary: Dictionary): string => {
 }
 
 export const evaluate = (magicWord: string, word: string): string[] => {
-  let magicWordDuplicate = magicWord;
+  let pendingChars = magicWord;
   let evaluations = Array(magicWord.length).fill('');
 
   for (let index = magicWord.length - 1; index >= 0; index--) {
     if (!magicWord.includes(magicWord[index])) {
-      evaluations[index] = 'absent';
+      evaluations[index] = Evaluation.ABSENT;
     } else if (magicWord[index] === word[index]) {
-      magicWordDuplicate = removeCharAtIndex(magicWordDuplicate, index);
-      evaluations[index] = 'correct';
+      pendingChars = removeCharAtIndex(pendingChars, index);
+      evaluations[index] = Evaluation.CORRECT;
     } else {
-      evaluations[index] = 'pending';
+      evaluations[index] = Evaluation.PENDING;
     }
   }
 
   evaluations.forEach((evaluation, index) => {
-    if (evaluation === 'pending') {
-      const position = magicWordDuplicate.indexOf(word[index]);
+    if (evaluation === Evaluation.PENDING) {
+      const position = pendingChars.indexOf(word[index]);
       if (position !== -1) {
-        magicWordDuplicate = removeCharAtIndex(magicWordDuplicate, position);
-        evaluations[index] = 'present';
+        pendingChars = removeCharAtIndex(pendingChars, position);
+        evaluations[index] = Evaluation.PRESENT;
       } else {
-        evaluations[index] = 'absent';
+        evaluations[index] = Evaluation.ABSENT;
       }
     }
   });

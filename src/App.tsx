@@ -180,10 +180,7 @@ function App() {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            width: "100%",
           }}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
           open={modalOpen}
           onClose={() => setModalOpen(false)}
         >

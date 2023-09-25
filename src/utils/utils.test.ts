@@ -41,17 +41,13 @@ describe('getRandomWord', () =>{
   });
 });
 
-describe('keyboard Inputs', () => {
+describe('Keyboard Inputs', () => {
   describe('isLetter', () => {
     it('returns true with keyCode between 65 and 90', () => {
       expect(isLetter(69)).toBeTruthy();
     });
 
-    it('returns true with keyCode between 97 and 122', () => {
-      expect(isLetter(99)).toBeTruthy();
-    });
-
-    it('returns false with keyCode not between 65 - 90 or 97 - 122', () => {
+    it('returns false with keyCode not between 65 and 90', () => {
       expect(isLetter(0)).toBeFalsy();
     });
   });

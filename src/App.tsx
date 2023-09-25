@@ -3,6 +3,7 @@ import "./App.css";
 import { getRandomWord } from "./utils/utils";
 import { GuessGrid } from "./components/GuessGrid";
 import { Dictionary } from "./types";
+import { LineNumberForm } from "./components/LineNumberForm";
 
 const MAXIMUM_TRIES = 6;
 
@@ -52,6 +53,7 @@ function App() {
           <>Loaded words, current word: {currentWord}</>
           <input type="text" maxLength={currentWord.toString().length} />
           <button onClick={() => console.log("clicked")}>Input Guess</button>
+          <LineNumberForm />
           <GuessGrid
             dictionary={wordDictionary}
             magicWord={currentWord}

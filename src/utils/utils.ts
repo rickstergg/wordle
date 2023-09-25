@@ -12,7 +12,7 @@ export const getRandomInt = (max: number) => {
 }
 
 export const isLetter = (keyCode: number) => {
-  return (keyCode >= 65 && keyCode <= 90) || (keyCode >= 97 && keyCode <= 122) ? true : false
+  return (keyCode >= 65 && keyCode <= 90) ? true : false
 }
 
 export const isDelete = (keyCode: number) => {

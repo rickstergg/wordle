@@ -4,9 +4,17 @@ import { getRandomWord } from "./utils/utils";
 import { GuessGrid } from "./components/grid/GuessGrid";
 import { Dictionary } from "./types";
 import { LineNumberForm } from "./components/LineNumberForm";
-import { Button, Grid, Modal, Box, Switch } from "@mui/material";
+import {
+  Button,
+  Grid,
+  Modal,
+  Box,
+  FormGroup,
+  FormControlLabel,
+} from "@mui/material";
 import { Keyboard } from "./components/keyboard/Keyboard";
 import { useSnackbar } from "notistack";
+import { PinkSwitch } from "./components/PinkSwitch";
 
 const MAXIMUM_TRIES = 6;
 
@@ -20,7 +28,8 @@ function App() {
   );
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [error, setError] = useState<string | undefined>();
-
+  const [hardMode, setHardMode] = useState<boolean>(false);
+  const [cheats, setCheats] = useState<boolean>(true); // For testing
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
@@ -139,9 +148,27 @@ function App() {
     });
   };
 
+  const handleHardModeToggle = () => {
+    setHardMode(!hardMode);
+  };
+
+  const handleCheatToggle = () => {
+    setCheats(!cheats);
+  };
+
   return (
     <div className="App">
       {error && <>Something went wrong!</>}
+      {cheats && (
+        <Grid
+          container
+          direction="column"
+          alignItems={"center"}
+          justifyContent={"center"}
+        >
+          <Grid item>Current magic word: {magicWord}</Grid>
+        </Grid>
+      )}
       {magicWord && (
         <Grid
           container
@@ -150,9 +177,6 @@ function App() {
           justifyContent={"center"}
           spacing={4}
         >
-          <Grid item>
-            <>Loaded words, current word: {magicWord}</>
-          </Grid>
           <Grid item>
             <LineNumberForm
               handleLineNumber={handleLineNumber}
@@ -201,6 +225,26 @@ function App() {
           </Box>
         </Modal>
       )}
+      <FormGroup
+        sx={{
+          position: "absolute",
+          top: 0,
+          right: 20,
+        }}
+      >
+        <FormControlLabel
+          control={<PinkSwitch onChange={() => handleHardModeToggle()} />}
+          label="Hard Mode?"
+          labelPlacement="start"
+        />
+        <FormControlLabel
+          control={
+            <PinkSwitch defaultChecked onChange={() => handleCheatToggle()} />
+          }
+          label="Cheats? ;)"
+          labelPlacement="start"
+        />
+      </FormGroup>
     </div>
   );
 }

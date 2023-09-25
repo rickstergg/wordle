@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import { getRandomInt } from "./utils/utils";
+import { getRandomWord } from "./utils/utils";
 import { Grid } from "./components/Grid";
+import { Dictionary } from "./types";
 
 const MAXIMUM_TRIES = 6;
 
 function App() {
-  const [wordList, setWordList] = useState<string[]>([]);
+  const [wordDictionary, setWordDictionary] = useState({});
   const [gameOver, setGameOver] = useState<boolean>(false);
   const [currentWord, setCurrentWord] = useState<string>("");
   const [guesses, setGuesses] = useState<string[]>(
-    new Array(MAXIMUM_TRIES).fill("")
+    Array(MAXIMUM_TRIES).fill("")
   );
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [error, setError] = useState<string | undefined>();
@@ -21,9 +22,12 @@ function App() {
       .then((r) => r.text())
       .then((text) => {
         if (!loaded) {
-          const words = text.split("\n");
-          setWordList(words);
-          setCurrentWord(words[getRandomInt(words.length - 1)]);
+          const dictionary: Dictionary = {};
+          text.split("\n").forEach((word, index) => {
+            dictionary[index] = word;
+          });
+          setWordDictionary(dictionary);
+          setCurrentWord(getRandomWord(dictionary));
         }
       })
       .catch((err) => setError(err));
@@ -35,26 +39,19 @@ function App() {
 
   const reset = () => {
     setGuesses(Array(MAXIMUM_TRIES).fill(""));
-    setCurrentWord("sweet"); // Testing purposes
+    setCurrentWord(getRandomWord(wordDictionary));
     setCurrentIndex(0);
     setGameOver(false);
   };
-
-  console.log(guesses);
 
   return (
     <div className="App">
       {error && <>Something went wrong!</>}
       {currentWord && (
         <>
-          <>
-            Loaded {wordList.length} words, current word: {currentWord}
-          </>
-          {/* <input
-            type="text"
-            onSubmit={() => console.log("numbered guess")}
-            maxLength={wordList.length.toString().length}
-          /> */}
+          <>Loaded words, current word: {currentWord}</>
+          <input type="text" maxLength={currentWord.toString().length} />
+          <button onClick={() => console.log("clicked")}>Input Guess</button>
           <Grid
             magicWord={currentWord}
             maxTries={MAXIMUM_TRIES}

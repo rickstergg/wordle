@@ -1,21 +1,15 @@
-import { useEffect, useState, Dispatch, SetStateAction } from "react";
+import { useEffect } from "react";
 import { isDelete, isEnter, isLetter } from "../utils/utils";
 import { CurrentRow } from "./CurrentRow";
 import { EmptyRow } from "./EmptyRow";
 import { EvaluatedRow } from "./EvaluatedRow";
-
-type GridProps = {
-  magicWord: string;
-  guesses: string[];
-  maxTries: number;
-  currentIndex: number;
-  setCurrentIndex: Dispatch<SetStateAction<number>>;
-  setGuesses: Dispatch<SetStateAction<string[]>>;
-};
+import { GridProps } from "../types";
 
 export const Grid = ({
   magicWord,
   maxTries,
+  gameOver,
+  setGameOver,
   currentIndex,
   setCurrentIndex,
   guesses,
@@ -23,7 +17,7 @@ export const Grid = ({
 }: GridProps) => {
   useEffect(() => {
     function detectKeydown(e: KeyboardEvent) {
-      if (currentIndex == guesses.length) {
+      if (currentIndex === guesses.length || gameOver) {
         console.log("game should be over!");
         return;
       }
@@ -51,6 +45,11 @@ export const Grid = ({
       }
 
       if (isEnter(e.keyCode)) {
+        if (guesses[currentIndex].length === 0) {
+          console.log("Guess cannot be empty!");
+          return;
+        }
+
         if (guesses[currentIndex].length !== magicWord.length) {
           // Guess must be same length!
           console.log("Guess must be same length as word!");
@@ -68,6 +67,10 @@ export const Grid = ({
           console.log("Game is over! Reset required.");
         }
 
+        if (guesses.includes(magicWord)) {
+          setGameOver(true);
+        }
+
         setCurrentIndex((prev) => {
           prev += 1;
           return prev;
@@ -80,7 +83,16 @@ export const Grid = ({
     return function cleanUp() {
       document.removeEventListener("keydown", detectKeydown);
     };
-  }, [guesses, currentIndex, magicWord]);
+  }, [
+    magicWord,
+    maxTries,
+    gameOver,
+    setGameOver,
+    currentIndex,
+    setCurrentIndex,
+    guesses,
+    setGuesses,
+  ]);
 
   return (
     <>

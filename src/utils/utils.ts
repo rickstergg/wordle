@@ -1,3 +1,5 @@
+import { Dictionary } from "../types";
+
 export const getRandomInt = (max: number) => {
   return Math.floor(Math.random() * max);
 }
@@ -18,9 +20,14 @@ export const removeCharAtIndex = (word: string, index: number) => {
   return word.slice(0, index) + word.slice(index + 1);
 }
 
+export const getRandomWord = (dictionary: Dictionary): string => {
+  const words = Object.values(dictionary);
+  return words[getRandomInt(words.length - 1)];
+}
+
 export const evaluate = (magicWord: string, word: string): string[] => {
   let magicWordDuplicate = magicWord;
-  let evaluations = new Array(magicWord.length).fill('');
+  let evaluations = Array(magicWord.length).fill('');
 
   for (let index = magicWord.length - 1; index >= 0; index--) {
     if (!magicWord.includes(magicWord[index])) {

@@ -7,12 +7,12 @@ const MAXIMUM_TRIES = 6;
 
 function App() {
   const [wordList, setWordList] = useState<string[]>([]);
-  const [currentWord, setCurrentWord] = useState<string | undefined>();
-  const [error, setError] = useState<string | undefined>();
+  const [currentWord, setCurrentWord] = useState<string>("");
   const [guesses, setGuesses] = useState<string[]>(
     new Array(MAXIMUM_TRIES).fill("")
   );
   const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [error, setError] = useState<string | undefined>();
 
   useEffect(() => {
     let loaded = false;
@@ -23,7 +23,6 @@ function App() {
           const words = text.split("\n");
           setWordList(words);
           setCurrentWord(words[getRandomInt(words.length - 1)]);
-          return;
         }
       })
       .catch((err) => setError(err));
@@ -35,7 +34,7 @@ function App() {
 
   const reset = () => {
     setGuesses(Array(MAXIMUM_TRIES).fill(""));
-    setCurrentWord(wordList[getRandomInt(wordList.length - 1)]);
+    setCurrentWord("sweet"); // Testing purposes
     setCurrentIndex(0);
   };
 

@@ -14,17 +14,36 @@ export const isEnter = (keyCode: number) => {
   return keyCode === 13;
 }
 
-export const evaluate = (magicWord: string, word: string) => {
-  const map = {};
+export const removeCharAtIndex = (word: string, index: number) => {
+  return word.slice(0, index) + word.slice(index + 1);
+}
 
-  return word.split('').map((letter, index) => {
-    if (!magicWord.includes(letter)) {
-      return 'absent';
+export const evaluate = (magicWord: string, word: string): string[] => {
+  let magicWordDuplicate = magicWord;
+  let evaluations = new Array(magicWord.length).fill('');
+
+  for (let index = magicWord.length - 1; index >= 0; index--) {
+    if (!magicWord.includes(magicWord[index])) {
+      evaluations[index] = 'absent';
     } else if (magicWord[index] === word[index]) {
-      return 'correct';
+      magicWordDuplicate = removeCharAtIndex(magicWordDuplicate, index);
+      evaluations[index] = 'correct';
     } else {
-      // Check for already accounted for characters, if something matches or is present with another character, delete it
-      return 'present';
+      evaluations[index] = 'pending';
+    }
+  }
+
+  evaluations.forEach((evaluation, index) => {
+    if (evaluation === 'pending') {
+      const position = magicWordDuplicate.indexOf(word[index]);
+      if (position !== -1) {
+        magicWordDuplicate = removeCharAtIndex(magicWordDuplicate, position);
+        evaluations[index] = 'present';
+      } else {
+        evaluations[index] = 'absent';
+      }
     }
   });
+
+  return evaluations;
 }

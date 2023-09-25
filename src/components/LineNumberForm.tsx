@@ -39,9 +39,9 @@ export const LineNumberForm = ({
             max: max,
             valueAsNumber: true,
           })}
-          sx={{ backgroundColor: "#3c3c3c", color: "lightpink" }}
+          sx={{ input: { color: "#ffb6c1" }, backgroundColor: "#3c3c3c" }}
           InputLabelProps={{
-            style: { color: "white" },
+            style: { color: "#ffffff" },
           }}
           label={`Line Number Input (1 - ${max})`}
           type="number"

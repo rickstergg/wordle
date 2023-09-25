@@ -66,9 +66,7 @@ export const Keyboard = ({
           </Grid>
         ))}
         <Grid item>
-          <Key key={"backspace"} value={"backspace"} onClick={onClick}>
-            ←
-          </Key>
+          <Key key={"backspace"} value={"backspace"} onClick={onClick} />
         </Grid>
       </Grid>
     </Grid>

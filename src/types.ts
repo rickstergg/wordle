@@ -31,7 +31,6 @@ export type KeyboardProps = {
 };
 
 export type KeyProps = {
-  children?: React.ReactNode;
   value: string;
   onClick: (value: string) => void;
 };

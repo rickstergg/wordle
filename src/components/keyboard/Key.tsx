@@ -1,7 +1,7 @@
 import { Button } from "@mui/material";
 import { KeyProps } from "../../types";
 
-export const Key = ({ children, value, onClick }: KeyProps) => {
+export const Key = ({ value, onClick }: KeyProps) => {
   const handleClick: React.MouseEventHandler<HTMLButtonElement> = (_) => {
     onClick(value);
   };
@@ -16,7 +16,7 @@ export const Key = ({ children, value, onClick }: KeyProps) => {
       }}
       onClick={handleClick}
     >
-      {children || value}
+      {value}
     </Button>
   );
 };

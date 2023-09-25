@@ -1,4 +1,4 @@
-import { CurrentRowProps } from "../types";
+import { CurrentRowProps } from "../../types";
 
 export const CurrentRow = ({ size, word, row }: CurrentRowProps) => {
   let letters = word.split("");

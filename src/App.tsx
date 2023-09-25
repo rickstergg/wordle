@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
 import { getRandomWord } from "./utils/utils";
-import { GuessGrid } from "./components/GuessGrid";
+import { GuessGrid } from "./components/grid/GuessGrid";
 import { Dictionary } from "./types";
 import { LineNumberForm } from "./components/LineNumberForm";
 import { Button, Grid } from "@mui/material";
@@ -49,11 +49,12 @@ function App() {
   const handleLineNumber = (lineNumber: number) => {
     let word = wordDictionary[lineNumber];
     setGuesses((prev) => {
+      const newGuesses = [...prev];
       if (currentWord.length < word.length) {
         word = word.slice(0, currentWord.length);
       }
-      prev[currentIndex] = word;
-      return prev;
+      newGuesses[currentIndex] = word;
+      return newGuesses;
     });
   };
 

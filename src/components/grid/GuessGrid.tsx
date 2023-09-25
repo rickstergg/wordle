@@ -1,9 +1,9 @@
 import { useEffect } from "react";
-import { isDelete, isEnter, isLetter } from "../utils/utils";
+import { isDelete, isEnter, isLetter } from "../../utils/utils";
 import { CurrentRow } from "./CurrentRow";
 import { EmptyRow } from "./EmptyRow";
 import { EvaluatedRow } from "./EvaluatedRow";
-import { GuessGridProps } from "../types";
+import { GuessGridProps } from "../../types";
 
 export const GuessGrid = ({
   magicWord,

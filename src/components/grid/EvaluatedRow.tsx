@@ -1,5 +1,5 @@
-import { EvaluatedRowProps } from "../types";
-import { evaluate } from "../utils/utils";
+import { EvaluatedRowProps } from "../../types";
+import { evaluate } from "../../utils/utils";
 
 export const EvaluatedRow = ({ magicWord, word, row }: EvaluatedRowProps) => {
   const evaluations = evaluate(magicWord, word);

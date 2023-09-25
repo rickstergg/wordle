@@ -1,4 +1,4 @@
-import { EmptyRowProps } from "../types";
+import { EmptyRowProps } from "../../types";
 
 export const EmptyRow = ({ row, size }: EmptyRowProps) => {
   return (

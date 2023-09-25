@@ -5,13 +5,14 @@ import { GuessGrid } from "./components/grid/GuessGrid";
 import { Dictionary } from "./types";
 import { LineNumberForm } from "./components/LineNumberForm";
 import { Button, Grid } from "@mui/material";
+import { Keyboard } from "./components/keyboard/Keyboard";
 
 const MAXIMUM_TRIES = 6;
 
 function App() {
   const [wordDictionary, setWordDictionary] = useState<Dictionary>({});
   const [gameOver, setGameOver] = useState<boolean>(false);
-  const [currentWord, setCurrentWord] = useState<string>("");
+  const [magicWord, setMagicWord] = useState<string>("");
   const [guesses, setGuesses] = useState<string[]>(
     Array(MAXIMUM_TRIES).fill("")
   );
@@ -29,7 +30,7 @@ function App() {
             dictionary[index] = word;
           });
           setWordDictionary(dictionary);
-          setCurrentWord(getRandomWord(dictionary));
+          setMagicWord(getRandomWord(dictionary));
         }
       })
       .catch((err) => setError(err));
@@ -41,7 +42,7 @@ function App() {
 
   const reset = () => {
     setGuesses(Array(MAXIMUM_TRIES).fill(""));
-    setCurrentWord(getRandomWord(wordDictionary));
+    setMagicWord(getRandomWord(wordDictionary));
     setCurrentIndex(0);
     setGameOver(false);
   };
@@ -50,18 +51,77 @@ function App() {
     let word = wordDictionary[lineNumber];
     setGuesses((prev) => {
       const newGuesses = [...prev];
-      if (currentWord.length < word.length) {
-        word = word.slice(0, currentWord.length);
+      if (magicWord.length < word.length) {
+        word = word.slice(0, magicWord.length);
       }
       newGuesses[currentIndex] = word;
       return newGuesses;
     });
   };
 
+  const handleDelete = () => {
+    setGuesses((prev) => {
+      const newGuesses = [...prev];
+      newGuesses[currentIndex] = newGuesses[currentIndex].slice(0, -1);
+      return newGuesses;
+    });
+  };
+
+  const handleLetter = (letter: string) => {
+    if (guesses[currentIndex].length < magicWord.length) {
+      setGuesses((prev) => {
+        const nextGuesses = [...prev];
+        nextGuesses[currentIndex] += letter;
+        return nextGuesses;
+      });
+      return;
+    }
+  };
+
+  const handleEnter = () => {
+    const currentGuess = guesses[currentIndex];
+    if (currentGuess.length === 0) {
+      console.log("Guess cannot be empty!");
+      return;
+    }
+
+    if (currentGuess.length !== magicWord.length) {
+      // Guess must be same length!
+      console.log("Guess must be same length as word!");
+      return;
+    }
+
+    if (guesses.slice(0, currentIndex).includes(currentGuess)) {
+      // Cannot guess the same word multiple times!
+      console.log("Cannot guess an already guessed word!");
+      return;
+    }
+
+    if (!Object.values(wordDictionary).includes(currentGuess)) {
+      console.log("Guess must be a word in the dictionary!");
+      return;
+    }
+
+    if (guesses.filter((guess) => guess.length > 0).length === MAXIMUM_TRIES) {
+      // Game is over
+      console.log("Game is over! Reset required.");
+      return;
+    }
+
+    if (guesses.includes(magicWord)) {
+      setGameOver(true);
+    }
+
+    setCurrentIndex((prev) => {
+      prev += 1;
+      return prev;
+    });
+  };
+
   return (
     <div className="App">
       {error && <>Something went wrong!</>}
-      {currentWord && (
+      {magicWord && (
         <Grid
           container
           direction="column"
@@ -70,30 +130,36 @@ function App() {
           spacing={4}
         >
           <Grid item>
-            <>Loaded words, current word: {currentWord}</>
+            <>Loaded words, current word: {magicWord}</>
           </Grid>
           <Grid item>
             <LineNumberForm
-              max={Object.values(wordDictionary).length}
               handleLineNumber={handleLineNumber}
+              max={Object.values(wordDictionary).length}
             />
           </Grid>
           <Grid item>
             <GuessGrid
-              dictionary={wordDictionary}
-              magicWord={currentWord}
-              maxTries={MAXIMUM_TRIES}
+              magicWord={magicWord}
               guesses={guesses}
-              gameOver={gameOver}
-              setGameOver={setGameOver}
-              setGuesses={setGuesses}
-              setCurrentIndex={setCurrentIndex}
               currentIndex={currentIndex}
+            />
+          </Grid>
+          <Grid item>
+            <Keyboard
+              gameOver={gameOver}
+              handleDelete={handleDelete}
+              handleEnter={handleEnter}
+              handleLetter={handleLetter}
             />
           </Grid>
         </Grid>
       )}
-      <Button onClick={() => reset()}>Reset!</Button>
+      <Grid>
+        <Button color={"error"} variant={"contained"} onClick={() => reset()}>
+          Reset!
+        </Button>
+      </Grid>
     </div>
   );
 }

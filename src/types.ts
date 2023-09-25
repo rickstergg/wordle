@@ -2,14 +2,8 @@ import { Dispatch, SetStateAction } from "react";
 
 export type GuessGridProps = {
   magicWord: string;
-  maxTries: number;
-  dictionary: Dictionary;
-  gameOver: boolean;
-  setGameOver: Dispatch<SetStateAction<boolean>>;
   currentIndex: number;
-  setCurrentIndex: Dispatch<SetStateAction<number>>;
   guesses: string[];
-  setGuesses: Dispatch<SetStateAction<string[]>>;
 };
 
 export type EvaluatedRowProps = {
@@ -27,6 +21,19 @@ export type CurrentRowProps = {
 export type EmptyRowProps = {
   row: number;
   size: number;
+};
+
+export type KeyboardProps = {
+  gameOver: boolean;
+  handleEnter: () => void;
+  handleDelete: () => void;
+  handleLetter: (key: string) => void;
+};
+
+export type KeyProps = {
+  children?: React.ReactNode;
+  value: string;
+  onClick: (value: string) => void;
 };
 
 export interface Dictionary {

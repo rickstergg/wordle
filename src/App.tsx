@@ -62,7 +62,7 @@ function App() {
   };
 
   const handleLineNumber = (lineNumber: number) => {
-    let word = wordDictionary[lineNumber];
+    let word = wordDictionary[lineNumber - 1];
     setGuesses((prev) => {
       const newGuesses = [...prev];
       if (magicWord.length < word.length) {

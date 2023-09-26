@@ -1,14 +1,6 @@
 import { Box, Grid, Button, TextField } from "@mui/material";
 import { useForm, SubmitHandler } from "react-hook-form";
-
-type Inputs = {
-  lineNumber: number;
-};
-
-type LineNumberFormProps = {
-  max: number;
-  handleLineNumber: (lineNumber: number) => void;
-};
+import { Inputs, LineNumberFormProps } from "../types";
 
 export const LineNumberForm = ({
   max,

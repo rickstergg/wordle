@@ -44,3 +44,12 @@ export interface WordDictionary {
 export interface StatusDictionary {
   [key: string]: Evaluation;
 }
+
+export type Inputs = {
+  lineNumber: number;
+};
+
+export type LineNumberFormProps = {
+  max: number;
+  handleLineNumber: (lineNumber: number) => void;
+};

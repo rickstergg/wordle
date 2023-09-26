@@ -1,4 +1,16 @@
-import { Evaluation, findHintError, assertRemainingCharacters, evaluate, getRandomInt, getRandomWord, isDelete, isEnter, isLetter, removeCharAtIndex, buildStatuses } from "./utils";
+import {
+  Evaluation,
+  findHintError,
+  assertRemainingCharacters,
+  evaluate,
+  getRandomInt,
+  getRandomWord,
+  isDelete,
+  isEnter,
+  isLetter,
+  removeCharAtIndex,
+  buildStatuses,
+} from "./utils";
 
 describe("getRandomInt", () => {
   it('returns a number between 0 and the limit', () => {

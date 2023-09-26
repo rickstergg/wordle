@@ -1,4 +1,4 @@
-import { Evaluation, evaluate, getRandomInt, getRandomWord, isDelete, isEnter, isLetter, removeCharAtIndex } from "./utils";
+import { Evaluation, findHintError, assertRemainingCharacters, evaluate, getRandomInt, getRandomWord, isDelete, isEnter, isLetter, removeCharAtIndex } from "./utils";
 
 describe("getRandomInt", () => {
   it('returns a number between 0 and the limit', () => {
@@ -171,3 +171,63 @@ describe('evaluate', () => {
     });
   });
 });
+
+describe('assertRemainingCharacters', () => {
+  describe('when there are no characters to assert', () => {
+    it('returns an empty string', () => {
+      expect(assertRemainingCharacters([], 'scream')).toBe('');
+    });
+  });
+
+  describe('when all characters exist', () => {
+    it('returns an empty string', () => {
+      expect(assertRemainingCharacters(['a', 'r', 'c'], 'scare')).toBe('');
+    });
+  });
+
+  describe('when some characters do not exist', () => {
+    it('returns an error message', () => {
+      expect(assertRemainingCharacters(['a', 'b', 'c'], 'cobble')).toBe("Character 'A' from previous guess not in cobble.")
+    });
+  });
+});
+
+describe('findHintError', () => {
+  const magicWord = 'tools';
+
+  describe('when there are no previous guesses', () => {
+    it('should return an empty string', () => {
+      expect(findHintError(magicWord, '', 'sweet')).toBe('');
+    });
+  });
+
+  describe('when there are no matches with magicWord', () => {
+    it('should return an empty string', () => {
+      expect(findHintError(magicWord, 'punch', 'blaze')).toBe('');
+    });
+  });
+
+  describe('when we guesed the magicWord', () => {
+    it('should return an empty string', () => {
+      expect(findHintError(magicWord, 'cools', magicWord)).toBe('');
+    });
+  });
+
+  describe('when there is a partial match', () => {
+    it('should return an error message on L', () => {
+      expect(findHintError(magicWord, 'fools', 'rules')).toBe('Character at position 4 must be L');
+    });
+
+    it('should return an error message on T', () => {
+      expect(findHintError(magicWord, 'tower', 'books')).toBe('Character at position 1 must be T');
+    });
+
+    it('should return an error message on T from previous guess', () => {
+      expect(findHintError(magicWord, 'sweet', 'cared')).toBe("Character 'T' from previous guess not in cared.");
+    });
+
+    it('should return an error message on S', () => {
+      expect(findHintError(magicWord, 'fouls', 'stare')).toBe("Character at position 5 must be S");
+    });
+  });
+})

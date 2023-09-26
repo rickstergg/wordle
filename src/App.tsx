@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import { getRandomWord } from "./utils/utils";
+import { findHintError, getRandomWord } from "./utils/utils";
 import { GuessGrid } from "./components/grid/GuessGrid";
 import { Dictionary } from "./types";
 import { LineNumberForm } from "./components/LineNumberForm";
@@ -28,7 +28,7 @@ function App() {
   );
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [error, setError] = useState<string | undefined>();
-  const [hardMode, setHardMode] = useState<boolean>(false);
+  const [hardMode, setHardMode] = useState<boolean>(true); // For Testing
   const [cheats, setCheats] = useState<boolean>(true); // For testing
   const { enqueueSnackbar } = useSnackbar();
 
@@ -55,7 +55,7 @@ function App() {
 
   const reset = () => {
     setGuesses(Array(MAXIMUM_TRIES).fill(""));
-    setMagicWord(getRandomWord(wordDictionary));
+    setMagicWord("farce"); //getRandomWord(wordDictionary)
     setCurrentIndex(0);
     setGameOver(false);
     setModalOpen(false);
@@ -134,6 +134,18 @@ function App() {
       return;
     }
 
+    if (hardMode) {
+      const error = findHintError(
+        magicWord,
+        guesses[currentIndex - 1],
+        currentGuess
+      );
+      if (error.length) {
+        enqueueSnackbar(error, { variant: "error" });
+        return;
+      }
+    }
+
     if (
       guesses.includes(magicWord) ||
       guesses.filter((guess) => guess.length > 0).length === MAXIMUM_TRIES
@@ -192,7 +204,6 @@ function App() {
           </Grid>
           <Grid item>
             <Keyboard
-              gameOver={gameOver}
               handleDelete={handleDelete}
               handleEnter={handleEnter}
               handleLetter={handleLetter}
@@ -233,7 +244,12 @@ function App() {
         }}
       >
         <FormControlLabel
-          control={<PinkSwitch onChange={() => handleHardModeToggle()} />}
+          control={
+            <PinkSwitch
+              defaultChecked
+              onChange={() => handleHardModeToggle()}
+            />
+          }
           label="Hard Mode?"
           labelPlacement="start"
         />

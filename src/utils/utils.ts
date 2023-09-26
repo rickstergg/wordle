@@ -61,3 +61,49 @@ export const evaluate = (magicWord: string, word: string): Evaluation[] => {
 
   return evaluations;
 }
+
+// Any correct letters should be immediately cancelled out
+// Take any remaining characters in previousGuess that are 'present'
+// Make sure they exist in the remaining currentGuess and cancel them out.
+export const findHintError = (magicWord: string, previousGuess: string, currentGuess: string): string => {
+  if (!previousGuess?.length) {
+    return '';
+  }
+
+  // TODO: Store Evaluations and pass them in instead of re-calculating
+  const evaluations = evaluate(magicWord, previousGuess);
+
+  const requiredLetters = [];
+  let index = previousGuess.length - 1;
+  while(index >= 0) {
+    if (evaluations[index] === Evaluation.CORRECT) {
+      if (previousGuess[index] === currentGuess[index]) {
+        previousGuess = removeCharAtIndex(previousGuess, index);
+        currentGuess = removeCharAtIndex(currentGuess, index);
+      } else {
+        return `Character at position ${index + 1} must be ${magicWord[index].toUpperCase()}`;
+      }
+    } else if (evaluations[index] === Evaluation.PRESENT) {
+      requiredLetters.push(previousGuess[index]);
+    }
+    index -= 1;
+  }
+
+  const error = assertRemainingCharacters(requiredLetters, currentGuess);
+  return error.length ? error : '';
+}
+
+export const assertRemainingCharacters = (characters: string[], currentGuess: string): string => {
+  let index = 0;
+  while (index < characters.length) {
+    const position = currentGuess.indexOf(characters[index]);
+    if (position !== -1) {
+      currentGuess = removeCharAtIndex(currentGuess, position);
+    } else {
+      return `Character '${characters[index].toUpperCase()}' from previous guess not in ${currentGuess}.`;
+    }
+    index += 1;
+  }
+
+  return '';
+}

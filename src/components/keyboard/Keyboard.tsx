@@ -5,7 +5,6 @@ import { Key } from "./Key";
 import { Grid } from "@mui/material";
 
 export const Keyboard = ({
-  gameOver,
   handleEnter,
   handleDelete,
   handleLetter,
@@ -39,6 +38,7 @@ export const Keyboard = ({
       handleLetter(value);
     }
   };
+
   return (
     <Grid container direction={"column"}>
       <Grid container item spacing={1} justifyContent={"center"}>

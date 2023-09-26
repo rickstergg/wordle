@@ -24,7 +24,6 @@ export type EmptyRowProps = {
 };
 
 export type KeyboardProps = {
-  gameOver: boolean;
   handleEnter: () => void;
   handleDelete: () => void;
   handleLetter: (key: string) => void;

@@ -1,16 +1,16 @@
 import { Button } from "@mui/material";
 import { KeyProps } from "../../types";
 
-export const Key = ({ value, onClick }: KeyProps) => {
+export const Key = ({ value, status, onClick }: KeyProps) => {
   const handleClick: React.MouseEventHandler<HTMLButtonElement> = (_) => {
     onClick(value);
   };
 
   return (
     <Button
+      className={status?.toLowerCase() ?? "unguessed-key"}
       sx={{
         cursor: "pointer",
-        backgroundColor: "#818384",
         color: "#ffffff",
         fontWeight: 700,
       }}

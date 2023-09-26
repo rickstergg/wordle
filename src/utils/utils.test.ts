@@ -1,4 +1,4 @@
-import { Evaluation, findHintError, assertRemainingCharacters, evaluate, getRandomInt, getRandomWord, isDelete, isEnter, isLetter, removeCharAtIndex } from "./utils";
+import { Evaluation, findHintError, assertRemainingCharacters, evaluate, getRandomInt, getRandomWord, isDelete, isEnter, isLetter, removeCharAtIndex, buildStatuses } from "./utils";
 
 describe("getRandomInt", () => {
   it('returns a number between 0 and the limit', () => {
@@ -230,4 +230,36 @@ describe('findHintError', () => {
       expect(findHintError(magicWord, 'fouls', 'stare')).toBe("Character at position 5 must be S");
     });
   });
-})
+});
+
+describe('buildStatuses', () => {
+  const magicWord = 'magic';
+
+  describe('when there are no guesses so far', () => {
+    it('should return an empty dictionary', () => {
+      expect(buildStatuses(magicWord, [])).toEqual({});
+    });
+  });
+
+  describe('when there are guesses but all are absent letters', () => {
+    const statusDictionary = buildStatuses(magicWord, ['tools']);
+
+    it('should return a status dictionary with only absent values', () => {
+      Object.values(statusDictionary).forEach(status => {
+        expect(status).toBe(Evaluation.ABSENT);
+      });
+    });
+
+    it('should return undefined letters not involved', () => {
+      expect(statusDictionary['f']).toBeUndefined();
+    });
+  });
+
+  describe('when there are absent and present matches', () => {
+    it('should have the highest letter statuses', () => {
+      // 'a' goes present, correct, back to present
+      const statusDictionary = buildStatuses(magicWord, ['stats', 'safes', 'state']);
+      expect(statusDictionary['a']).toBe(Evaluation.CORRECT);
+    });
+  });
+});

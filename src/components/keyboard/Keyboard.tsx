@@ -5,6 +5,7 @@ import { Key } from "./Key";
 import { Grid } from "@mui/material";
 
 export const Keyboard = ({
+  statuses,
   handleEnter,
   handleDelete,
   handleLetter,
@@ -40,30 +41,32 @@ export const Keyboard = ({
   };
 
   return (
-    <Grid container direction={"column"}>
-      <Grid container item spacing={1} justifyContent={"center"}>
-        {["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"].map((key) => (
-          <Grid key={key} item>
-            <Key value={key} onClick={onClick} />
-          </Grid>
-        ))}
-      </Grid>
-      <Grid container item spacing={1} justifyContent={"center"}>
-        {["a", "s", "d", "f", "g", "h", "j", "k", "l"].map((key) => (
-          <Grid key={key} item>
-            <Key value={key} onClick={onClick} />
-          </Grid>
-        ))}
-      </Grid>
-      <Grid container item spacing={1} justifyContent={"center"}>
-        {["enter", "z", "x", "c", "v", "b", "n", "m", "backspace"].map(
-          (key) => (
+    <div className="keyboard">
+      <Grid container direction={"column"}>
+        <Grid container item spacing={1} justifyContent={"center"}>
+          {["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"].map((key) => (
             <Grid key={key} item>
-              <Key value={key} onClick={onClick} />
+              <Key value={key} status={statuses[key]} onClick={onClick} />
             </Grid>
-          )
-        )}
+          ))}
+        </Grid>
+        <Grid container item spacing={1} justifyContent={"center"}>
+          {["a", "s", "d", "f", "g", "h", "j", "k", "l"].map((key) => (
+            <Grid key={key} item>
+              <Key value={key} status={statuses[key]} onClick={onClick} />
+            </Grid>
+          ))}
+        </Grid>
+        <Grid container item spacing={1} justifyContent={"center"}>
+          {["enter", "z", "x", "c", "v", "b", "n", "m", "backspace"].map(
+            (key) => (
+              <Grid key={key} item>
+                <Key value={key} status={statuses[key]} onClick={onClick} />
+              </Grid>
+            )
+          )}
+        </Grid>
       </Grid>
-    </Grid>
+    </div>
   );
 };

@@ -37,14 +37,18 @@
   border: 2px solid #3a3a3c;
 }
 
-.correct {
+.correct, .keyboard .correct {
   background-color: #538d4e;
 }
 
-.present {
+.present, .keyboard .present{
   background-color: #b59f3b;
 }
 
-.absent {
+.absent, .keyboard .absent {
   background-color: #3a3a3c;
+}
+
+.keyboard .unguessed-key {
+  background-color: #818384;
 }

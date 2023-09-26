@@ -1,4 +1,4 @@
-import { Dictionary } from "../types";
+import { StatusDictionary, WordDictionary } from "../types";
 
 export enum Evaluation {
   ABSENT = 'ABSENT',
@@ -27,7 +27,7 @@ export const removeCharAtIndex = (word: string, index: number) => {
   return word.slice(0, index) + word.slice(index + 1);
 }
 
-export const getRandomWord = (dictionary: Dictionary): string => {
+export const getRandomWord = (dictionary: WordDictionary): string => {
   const words = Object.values(dictionary);
   return words[getRandomInt(words.length - 1)];
 }
@@ -106,4 +106,33 @@ export const assertRemainingCharacters = (characters: string[], currentGuess: st
   }
 
   return '';
+}
+
+export const buildStatuses = (magicWord: string, guesses: string[]): StatusDictionary => {
+  const alphabetStatuses: StatusDictionary = {};
+
+  guesses.forEach((guess) => {
+    const evaluations = evaluate(magicWord, guess);
+    const letters = guess.split('');
+
+    letters.forEach((letter, index) => {
+      switch (evaluations[index]) {
+        case Evaluation.ABSENT:
+          if (!alphabetStatuses[letter]) {
+            alphabetStatuses[letter] = Evaluation.ABSENT;
+          }
+          break;
+        case Evaluation.PRESENT:
+          if (!alphabetStatuses[letter] || alphabetStatuses[letter] === Evaluation.ABSENT) {
+            alphabetStatuses[letter] = Evaluation.PRESENT;
+          }
+          break;
+        case Evaluation.CORRECT:
+          alphabetStatuses[letter] = Evaluation.CORRECT;
+          break;
+      }
+    });
+  });
+
+  return alphabetStatuses;
 }

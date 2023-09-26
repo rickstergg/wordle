@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import { findHintError, getRandomWord } from "./utils/utils";
+import { buildStatuses, findHintError, getRandomWord } from "./utils/utils";
 import { GuessGrid } from "./components/grid/GuessGrid";
-import { Dictionary } from "./types";
+import { WordDictionary } from "./types";
 import { LineNumberForm } from "./components/LineNumberForm";
 import {
   Button,
@@ -19,7 +19,7 @@ import { PinkSwitch } from "./components/PinkSwitch";
 const MAXIMUM_TRIES = 6;
 
 function App() {
-  const [wordDictionary, setWordDictionary] = useState<Dictionary>({});
+  const [wordDictionary, setWordDictionary] = useState<WordDictionary>({});
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [gameOver, setGameOver] = useState<boolean>(false);
   const [magicWord, setMagicWord] = useState<string>("");
@@ -28,7 +28,7 @@ function App() {
   );
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [error, setError] = useState<string | undefined>();
-  const [hardMode, setHardMode] = useState<boolean>(true); // For Testing
+  const [hardMode, setHardMode] = useState<boolean>(false); // For Testing
   const [cheats, setCheats] = useState<boolean>(true); // For testing
   const { enqueueSnackbar } = useSnackbar();
 
@@ -38,7 +38,7 @@ function App() {
       .then((r) => r.text())
       .then((text) => {
         if (!loaded) {
-          const dictionary: Dictionary = {};
+          const dictionary: WordDictionary = {};
           text.split("\n").forEach((word, index) => {
             dictionary[index] = word;
           });
@@ -55,7 +55,7 @@ function App() {
 
   const reset = () => {
     setGuesses(Array(MAXIMUM_TRIES).fill(""));
-    setMagicWord("farce"); //getRandomWord(wordDictionary)
+    setMagicWord(getRandomWord(wordDictionary));
     setCurrentIndex(0);
     setGameOver(false);
     setModalOpen(false);
@@ -204,6 +204,10 @@ function App() {
           </Grid>
           <Grid item>
             <Keyboard
+              statuses={buildStatuses(
+                magicWord,
+                guesses.filter((_, index) => index < currentIndex)
+              )}
               handleDelete={handleDelete}
               handleEnter={handleEnter}
               handleLetter={handleLetter}
@@ -244,12 +248,7 @@ function App() {
         }}
       >
         <FormControlLabel
-          control={
-            <PinkSwitch
-              defaultChecked
-              onChange={() => handleHardModeToggle()}
-            />
-          }
+          control={<PinkSwitch onChange={() => handleHardModeToggle()} />}
           label="Hard Mode?"
           labelPlacement="start"
         />
